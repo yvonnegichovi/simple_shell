@@ -14,6 +14,9 @@
 #include <errno.h>
 #include <fcntl.h>
 
+#define MAX_ENV_LEN 100
+
+int my_setenv(const char *name, const char *value);
 extern char **environ;
 char **split_string(char *input);
 void free_args(char **args);
