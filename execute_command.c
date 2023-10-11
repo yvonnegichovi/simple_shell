@@ -26,6 +26,7 @@ char *find_path(char **env)
 		for (i = 0; i < 6; i++)
 			path++;
 	}
+	printf("path is %s\n", path);
 	return (path);
 }
 
@@ -37,25 +38,31 @@ char *find_path(char **env)
 
 char **split_path(char *path)
 {
-	char **tokens = NULL, *stoks;
+	char **tokens = NULL, *stoks, *path_copy = NULL;
 	int i = 0, num_tokens = 0;
 
-	stoks = strtok(path, ":");
+	path_copy = _strdup(path);
+	stoks = strtok(path_copy, ":");
 	while (stoks != NULL)
 		num_tokens++, stoks = strtok(NULL, ":");
 	tokens = malloc(sizeof(char *) * (num_tokens + 1));
 	if (tokens == NULL)
 	{
 		perror("Error tokenizing");
+		free(path_copy);
 		return (NULL);
 	}
-	stoks = strtok(path, ":");
+	free(path_copy);
+	path_copy = _strdup(path);
+	stoks = strtok(path_copy, ":");
 	for (i = 0; i < num_tokens; i++)
 	{
 		tokens[i] = _strdup(stoks);
 		stoks = strtok(NULL, ":");
+		printf("Tokens %d: %s\n", i, tokens[i]);
 	}
 	tokens[i] = NULL;
+	free(path_copy);
 	return (tokens);
 }
 
@@ -86,7 +93,7 @@ void execute_command(char **args, char **env)
 			if (args[0] != NULL && _strstr(args[0], "/") != NULL)
 			{
 				if (execve(args[0], args, env) == -1)
-					perror("Execution failed"), exit(EXIT_FAILURE);
+					perror("Execution failed"),  free_args(args), exit(EXIT_FAILURE);
 			}
 			else
 			{
@@ -94,11 +101,11 @@ void execute_command(char **args, char **env)
 				if (path != NULL)
 				{
 					if (execve(path, args, env) == -1)
-						perror("Execution failed"), exit(EXIT_FAILURE);
+						perror("Execution failed"), free(path), free_args(args), exit(EXIT_FAILURE);
 				}
 				else
 				{
-					printf("%s: Command not found\n", args[0]);
+					printf("%s: Command not found\n", args[0]), free(path), free_args(args);
 					exit(EXIT_FAILURE);
 				}
 			}
@@ -117,28 +124,44 @@ void execute_command(char **args, char **env)
 
 char *find_command(char *command, char **env)
 {
-	char *path_env = find_path(env), **paths, *path_bin, *full_path = NULL;
+	char *path_env = find_path(env), **paths, *full_path = NULL;
 	int i = 0;
 
 	if (path_env != NULL)
 	{
-		path_bin = _strstr(path_env, "/usr/bin");
-		paths = split_path(path_bin);
+		paths = split_path(path_env);
+		printf("paths is %s\n", *paths);
+		for (i = 0; paths[i] != NULL; i++)
 		{
-			for (i = 0; paths[i] != NULL; i++)
+			if  (paths[i] != NULL && command != NULL)
 			{
-				full_path = malloc(_strlen(paths[i]) + _strlen(command) + 2);
-				if (full_path == NULL)
-					perror("Memory allocation failed"), exit(EXIT_FAILURE);
-				sprintf(full_path, "%s/%s", paths[i], command);
-				if (access(full_path, X_OK) == 0)
+				printf("paths %d: %s\n", i, paths[i]);
+				printf ("command is %s\n", command);
+				full_path = malloc(strlen(paths[i]) + strlen(command) + 2);
+				if (full_path != NULL)
 				{
-					free_args(paths);
-					return (full_path);
+					sprintf(full_path, "%s/%s", paths[i], command);
+					if (access(full_path, X_OK) == 0)
+					{
+						free_tokens(paths);
+						printf("full path is %s\n", full_path);
+						return (full_path);
+					}
+					free(full_path);
 				}
-				free(full_path);
+				else
+				{
+					perror("Memory allocation failed");
+					free_tokens(paths);
+					return (NULL);
+				}
+			}
+			else
+			{
+				printf("error: path or command is empty\n");
 			}
 		}
+		free_tokens(paths);
 	}
 	return (NULL);
 }
@@ -152,13 +175,11 @@ void free_tokens(char **tokens)
 {
 	int i = 0;
 
-	if (tokens != NULL)
+	while (tokens[i] != NULL)
 	{
-		for (i = 0; tokens[i] != NULL; i++)
-		{
-			free(tokens[i]);
-		}
-		free(tokens);
+		free(tokens[i]);
+		i++;
 	}
+	free(tokens);
 }
 

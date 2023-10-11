@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **env)
 	{
 		if (mode == 1)
 			write(STDOUT_FILENO, prompt, _strlen(prompt));
-		nlength = getline(&buffer, &buffsize, stdin);
+		nlength = _getline(&buffer, &buffsize, stdin);
 		if (nlength == -1)
 		{
 			if (mode == 1)
@@ -29,11 +29,17 @@ int main(int argc, char **argv, char **env)
 			free(buffer);
 			continue;
 		}
-		args = split_string(buffer), buffer = NULL;
+		args = split_string(buffer);
+		if (args == NULL)
+		{
+			free(buffer), free_args(args);
+			perror(argv[0]);
+			exit(EXIT_FAILURE);
+		}
 		execute_command(args, env);
-		free(buffer);
 		free_args(args);
 	}
+	free(buffer);
 	return (0);
 }
 

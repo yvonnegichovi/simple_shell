@@ -36,24 +36,19 @@ int is_builtin(char **args, char **env)
 int _envbuiltin(char **args, char **env)
 {
 	int i = 0, j = 0;
-	char *env_vars[] = {"USER", "LANGUAGE", "SESSION", "COMPIZ_CONFIG_PROFILE",
-		"SHLVL", "HOME", "C_IS", "DESKTOP_SESSION",
-		"LOGNAME", "PATH", "TERM", "DISPLAY", NULL};
 	(void)args;
 
-	*env = *environ;
-	for (i = 0; environ[i] != NULL; i++)
+	while (env[i])
 	{
-		for (j = 0; env_vars[j] != NULL; j++)
+		while (env[i][j])
 		{
-			if (strstr(environ[i], env_vars[j]) == environ[i])
-			{
-				printf("%s\n", environ[i]);
-				break;
-			}
+			write(1, &env[i][j], 1);
+			j++;
 		}
+		j = 0;
+		i++;
+		write(1, "\n", 1);
 	}
-	printf("\n");
 	return (0);
 }
 
