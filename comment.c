@@ -2,7 +2,7 @@
 /*
  *
  */
-int main ()
+int comment(void)
 {
 	char user_comment[1000];
 

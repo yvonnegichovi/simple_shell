@@ -31,6 +31,7 @@ void execute_command(char **args, char **env);
 char *find_command(char *command, char **env);
 void free_tokens(char **tokens);
 ssize_t _getline(char **line, size_t *n, FILE *stream);
+int comment(void);
 
 /* strings functions */
 
