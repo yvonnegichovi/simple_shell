@@ -101,11 +101,11 @@ void execute_command(char **args, char **env)
 				if (path != NULL)
 				{
 					if (execve(path, args, env) == -1)
-						perror("Execution failed"), free(path), free_args(args), exit(EXIT_FAILURE);
+						perror("Exec failed"), free(path), free_args(args), exit(EXIT_FAILURE);
 				}
 				else
 				{
-					printf("%s: Command not found\n", args[0]), free(path), free_args(args);
+					perror("Command not found"), free(path), free_args(args);
 					exit(EXIT_FAILURE);
 				}
 			}
@@ -136,7 +136,7 @@ char *find_command(char *command, char **env)
 			if  (paths[i] != NULL && command != NULL)
 			{
 				printf("paths %d: %s\n", i, paths[i]);
-				printf ("command is %s\n", command);
+				printf("command is %s\n", command);
 				full_path = malloc(strlen(paths[i]) + strlen(command) + 2);
 				if (full_path != NULL)
 				{
@@ -158,11 +158,11 @@ char *find_command(char *command, char **env)
 			}
 			else
 			{
-				printf("error: path or command is empty\n");
+				perror("Error: path or command is empty");
 			}
 		}
-		free_tokens(paths);
 	}
+	free_tokens(paths);
 	return (NULL);
 }
 

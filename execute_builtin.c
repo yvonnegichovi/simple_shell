@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * is_builtin - checks whether a command is a builtin
  * @args: an array of strings inputted
@@ -99,39 +100,45 @@ int _exitbuiltin(char **args, char **env)
 
 int _cdbuiltin(char **args, char **env)
 {
-	char *new_dir = NULL;
-	char *current_dir = NULL;
+	char *new_dir = NULL, *current_dir = NULL, *new_current_dir = NULL;
 	(void)env;
 
-	if (args[1] != NULL)
-	{
-		if (_strcmp(args[1], "~") == 0)
-			new_dir = getenv("HOME");
-		else if (_strcmp(args[1], "-") == 0)
-			new_dir = getenv("OLDPWD");
-		else
-			new_dir = args[1];
-	}
+	if (args[1] == NULL || _strcmp(args[1], "~") == 0)
+		new_dir = getenv("HOME");
+	else if (_strcmp(args[1], "-") == 0)
+		new_dir = getenv("OLDPWD");
+	else
+		new_dir = args[1];
 	if (new_dir == NULL)
+		fprintf(stderr, "Error: environment variable not found\n"), return (-1);
+	current_dir = getcwd(NULL, 0);
+	if (current_dir == NULL)
 	{
-		fprintf(stderr, "Error: environment variable not found\n");
-		return (-1);
-	}
-	current_dir = malloc(sizeof((current_dir) + 1));
-	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
-	{
-		perror("getcwd");
+		perror("malloc");
 		return (-1);
 	}
 	if (chdir(new_dir) == -1)
 	{
-		perror("chdir");
-		free(current_dir);
+		perror("chdir"), free(current_dir);
 		return (-1);
 	}
-	setenv("OLDPWD", current_dir, 1);
-	free(current_dir);
-	free_args(args);
+	if (setenv("OLDPWD", current_dir, 1) == -1)
+	{
+		perror("setenv"), free(current_dir);
+		return (-1);
+	}
+	new_current_dir = getcwd(NULL, 0);
+	if (new_current_dir == NULL)
+	{
+		perror("getcwd"), free(current_dir);
+		return (-1);
+	}
+	if (setenv("PWD", new_current_dir, 1) == -1)
+	{
+		perror("setenv"), free(current_dir), free(new_current_dir);
+		return (-1);
+	}
+	free(current_dir), free(new_current_dir);
 	return (0);
 }
 

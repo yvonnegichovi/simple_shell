@@ -39,7 +39,6 @@ int main(int argc, char **argv, char **env)
 		execute_command(args, env);
 		free_args(args);
 	}
-	free(buffer);
 	return (0);
 }
 
