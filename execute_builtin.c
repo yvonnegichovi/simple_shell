@@ -110,7 +110,10 @@ int _cdbuiltin(char **args, char **env)
 	else
 		new_dir = args[1];
 	if (new_dir == NULL)
-		fprintf(stderr, "Error: environment variable not found\n"), return (-1);
+	{
+		fprintf(stderr, "Error: environment variable not found\n");
+		return (-1);
+	}
 	current_dir = getcwd(NULL, 0);
 	if (current_dir == NULL)
 	{

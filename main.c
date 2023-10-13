@@ -29,7 +29,7 @@ int main(int argc, char **argv, char **env)
 			free(buffer);
 			continue;
 		}
-		args = split_string(buffer);
+		args = split_string(buffer), buffer = NULL;
 		if (args == NULL)
 		{
 			free(buffer), free_args(args);
