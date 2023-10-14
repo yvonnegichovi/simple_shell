@@ -8,7 +8,7 @@
  * Return: 0 on success
  */
 
-int shell(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **env)
 {
 	char *buffer = NULL, *prompt = "$ ", **args = NULL;
 	size_t buffsize = 0;
@@ -29,7 +29,7 @@ int shell(int argc, char **argv, char **env)
 			free(buffer);
 			continue;
 		}
-		args = split_string(buffer), buffer = NULL;
+		args = split_string(buffer);
 		if (args == NULL)
 		{
 			free(buffer), free_args(args);
