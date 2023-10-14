@@ -33,6 +33,8 @@ char **split_path(char *path);
 void execute_command(char **args, char **env);
 char *find_command(char *command, char **env);
 void free_tokens(char **tokens);
+ssize_t _getline(char **line, size_t *n, FILE *stream);
+int comment(void);
 
 /* strings functions */
 
@@ -43,8 +45,6 @@ char *_strdup(const char *str);
 int _strcmp(char *str1, char *str2);
 char *_strcat(char *dest, char *src);
 char *_strstr(char *s, char *c);
-
-/* built-in functions */
 
 
 #endif /* SHELL_H */
