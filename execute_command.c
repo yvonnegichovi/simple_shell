@@ -9,7 +9,6 @@
 
 char *find_path(char **env)
 {
-<<<<<<< HEAD
         char *path = NULL;
         int i = 0;
 
@@ -27,28 +26,8 @@ char *find_path(char **env)
                 for (i = 0; i < 6; i++)
                         path++;
         }
-        return (path);
-=======
-	char *path = NULL;
-	int i = 0;
-
-	while (env[i])
-	{
-		if (_strstr(env[i], "PATH") && env[i][0] == 'P' && env[i][4] == '=')
-		{
-			path = env[i];
-			break;
-		}
-		i++;
-	}
-	if (path != NULL)
-	{
-		for (i = 0; i < 6; i++)
-			path++;
-	}
 	printf("path is %s\n", path);
-	return (path);
->>>>>>> 429d99ae6a22a2dd6bb66f52bfd7f24fbc88be35
+        return (path);
 }
 /**
  * split_path - splits the path
@@ -58,7 +37,6 @@ char *find_path(char **env)
 
 char **split_path(char *path)
 {
-<<<<<<< HEAD
         char **tokens = NULL, *stoks;
         int i = 0, num_tokens = 0;
 
@@ -79,34 +57,6 @@ char **split_path(char *path)
         }
         tokens[i] = NULL;
         return (tokens);
-}
-=======
-	char **tokens = NULL, *stoks, *path_copy = NULL;
-	int i = 0, num_tokens = 0;
-
-	path_copy = _strdup(path);
-	stoks = strtok(path_copy, ":");
-	while (stoks != NULL)
-		num_tokens++, stoks = strtok(NULL, ":");
-	tokens = malloc(sizeof(char *) * (num_tokens + 1));
-	if (tokens == NULL)
-	{
-		perror("Error tokenizing");
-		free(path_copy);
-		return (NULL);
-	}
-	free(path_copy);
-	path_copy = _strdup(path);
-	stoks = strtok(path_copy, ":");
-	for (i = 0; i < num_tokens; i++)
-	{
-		tokens[i] = _strdup(stoks);
-		stoks = strtok(NULL, ":");
-		printf("Tokens %d: %s\n", i, tokens[i]);
-	}
-	tokens[i] = NULL;
-	free(path_copy);
-	return (tokens);
 }
 
 /**
@@ -226,4 +176,3 @@ void free_tokens(char **tokens)
 	free(tokens);
 }
 
->>>>>>> 429d99ae6a22a2dd6bb66f52bfd7f24fbc88be35
