@@ -9,7 +9,6 @@
 
 char *find_path(char **env)
 {
-<<<<<<< HEAD
         char *path = NULL;
         int i = 0;
 
@@ -28,7 +27,6 @@ char *find_path(char **env)
                         path++;
         }
         return (path);
-=======
 	char *path = NULL;
 	int i = 0;
 
@@ -48,7 +46,6 @@ char *find_path(char **env)
 	}
 	printf("path is %s\n", path);
 	return (path);
->>>>>>> 429d99ae6a22a2dd6bb66f52bfd7f24fbc88be35
 }
 /**
  * split_path - splits the path
