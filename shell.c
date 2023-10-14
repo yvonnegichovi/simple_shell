@@ -8,7 +8,7 @@
  * Return: 0 on success
  */
 
-int main(int argc, char **argv, char **env)
+int shell(int argc, char **argv, char **env)
 {
 	char *buffer = NULL, *prompt = "$ ", **args = NULL;
 	size_t buffsize = 0;
@@ -36,4 +36,3 @@ int main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
-

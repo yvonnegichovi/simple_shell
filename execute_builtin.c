@@ -16,7 +16,7 @@ int is_builtin(char **args, char **env)
 		return (0);
 	}
 	else if (_strcmp(args[0], "cd") == 0 ||
-		_strcmp(args[0], "env") == 0 || _strcmp(args[0], "exit") == 0)
+		_strcmp(args[0], "env") == 0 || _strcmp(args[0],"alias") == 0 ||  _strcmp(args[0], "exit") == 0)
 	{
 		return (1);
 	}
@@ -56,7 +56,25 @@ int _envbuiltin(char **args, char **env)
 	printf("\n");
 	return (0);
 }
+/*
+ *
+ *
+ */
+int _aliasbuiltin()
+{
+    char *path = getenv("PATH");
+    if (path != NULL) {
+        printf("PATH = %s\n", path);
+    } else {
+        printf("PATH is not set.\n");
+    }
 
+    setenv("MY_VARIABLE", "some_value", 1);
+
+    unsetenv("MY_VARIABLE");
+
+    return 0;
+}
 
 /**
  * _exitbuiltin - implements the exit built-in command
@@ -140,8 +158,7 @@ int _cdbuiltin(char **args, char **env)
 	return (0);
 }
 
-/**
- * execute_builtin - execute builtin commands
+ /* execute_builtin - execute builtin commands
  * @args: an array of strings inputted
  * @env: an array of environment variables
  * Return: 0 on success
@@ -159,4 +176,3 @@ int execute_builtin(char **args, char **env)
 	free_args(args);
 	return (0);
 }
-

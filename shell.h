@@ -18,6 +18,9 @@
 
 int my_setenv(const char *name, const char *value);
 extern char **environ;
+int fold (int argc, char *argv[]);
+int vito ();
+int _aliasbuiltin();
 char **split_string(char *input);
 void free_args(char **args);
 int is_builtin(char **args, char **env);
