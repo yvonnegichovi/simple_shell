@@ -17,7 +17,7 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 
-	for (;;)
+	while (1)
 	{
 		if (mode == 1)
 			write(STDOUT_FILENO, prompt, _strlen(prompt));
@@ -26,8 +26,7 @@ int main(int argc, char **argv, char **env)
 		{
 			if (mode == 1)
 				write(STDOUT_FILENO, "\n", 1);
-			free(buffer);
-			continue;
+			break;
 		}
 		args = split_string(buffer);
 		if (args == NULL)
@@ -38,6 +37,10 @@ int main(int argc, char **argv, char **env)
 		}
 		execute_command(args, env);
 		free_args(args);
+		if (buffer)
+			free(buffer), buffer = NULL, buffsize = 0;
+		printf("buffer buffing is %s\n", buffer);
 	}
+	printf("buffer is still %s\n", buffer);
 	return (0);
 }

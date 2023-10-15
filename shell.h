@@ -18,16 +18,10 @@
 
 int my_setenv(const char *name, const char *value);
 extern char **environ;
-int fold (int argc, char *argv[]);
-int vito ();
-int _aliasbuiltin();
+int fold(int argc, char *argv[]);
+int vito(void);
 char **split_string(char *input);
 void free_args(char **args);
-int is_builtin(char **args, char **env);
-int _envbuiltin(char **args, char **env);
-int _exitbuiltin(char **args, char **env);
-int _cdbuiltin(char **args, char **env);
-int execute_builtin(char **args, char **env);
 char *find_path(char **env);
 char **split_path(char *path);
 void execute_command(char **args, char **env);
@@ -46,5 +40,14 @@ int _strcmp(char *str1, char *str2);
 char *_strcat(char *dest, char *src);
 char *_strstr(char *s, char *c);
 
+/* builtin functions */
+
+int echo_last_exit_status(void);
+int is_builtin(char **args, char **env);
+int _envbuiltin(char **args, char **env);
+int _exitbuiltin(char **args, char **env);
+int _cdbuiltin(char **args, char **env);
+int execute_builtin(char **args, char **env);
+int _aliasbuiltin(void);
 
 #endif /* SHELL_H */

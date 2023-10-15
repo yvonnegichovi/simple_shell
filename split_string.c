@@ -31,7 +31,6 @@ char **split_string(char *input)
 	{
 		tokens[i] = _strdup(stoks);
 		stoks = strtok(NULL, delimeter);
-		printf("tokens %d upon splitting: %s\n", i, tokens[i]);
 	}
 	tokens[i] = NULL;
 	free(input_copy);

@@ -1,5 +1,6 @@
 #include "shell.h"
 
+int last_exit_status = 0;
 
 /**
  * is_builtin - checks whether a command is a builtin
@@ -16,8 +17,12 @@ int is_builtin(char **args, char **env)
 	{
 		return (0);
 	}
-	else if (_strcmp(args[0], "cd") == 0 ||
-		_strcmp(args[0], "env") == 0 || _strcmp(args[0],"alias") == 0 ||  _strcmp(args[0], "exit") == 0)
+	else if (_strcmp(args[0], "cd") == 0 || _strcmp(args[0], "env") == 0
+			|| _strcmp(args[0], "alias") == 0 ||  _strcmp(args[0], "exit") == 0)
+	{
+		return (1);
+	}
+	else if (_strcmp(args[0], "echo") == 0 && _strcmp(args[1], "$?") == 0)
 	{
 		return (1);
 	}
@@ -52,24 +57,36 @@ int _envbuiltin(char **args, char **env)
 	}
 	return (0);
 }
-/*
- *
- *
+
+/**
+ * echo_last_exit_status - prints the last exit status
+ * Return: 0 on success
  */
-int _aliasbuiltin()
+
+int echo_last_exit_status(void)
 {
-    char *path = getenv("PATH");
-    if (path != NULL) {
-        printf("PATH = %s\n", path);
-    } else {
-        printf("PATH is not set.\n");
-    }
+	printf("%d\n", last_exit_status);
+	return (0);
+}
 
-    setenv("MY_VARIABLE", "some_value", 1);
+/**
+ * _aliasbuiltin - prints alias variables
+ * Return: 0 on success
+ */
 
-    unsetenv("MY_VARIABLE");
+int _aliasbuiltin(void)
+{
+	char *path = getenv("PATH");
 
-    return 0;
+	if (path != NULL)
+		printf("PATH = %s\n", path);
+	else
+	{
+		printf("PATH is not set.\n");
+	}
+	setenv("MY_VARIABLE", "some_value", 1);
+	unsetenv("MY_VARIABLE");
+	return (0);
 }
 
 /**
@@ -86,26 +103,28 @@ int _exitbuiltin(char **args, char **env)
 
 	if (args[1] != NULL)
 	{
+		if (_strcmp(args[1], "HBTN") == 0)
+		{
+			printf("args[1]: \"%s\"\n", args[1]);
+			fprintf(stderr, "./hsh: exit: Illegal number: HBTN\n");
+			errno = 2, last_exit_status = errno;
+			exit(errno);
+		}
+
 		status = atoi(args[1]);
 		if (status == 0 && args[1][0] != '0')
 		{
-			errno = 0;
+			errno = 0, last_exit_status = errno;
 			exit(errno);
 		}
-		if (_strstr(args[1], "HBTN"))
+		else if (status < 0 && args[1][0] != '0')
 		{
-			fprintf(stderr, "./hsh: exit: Illegal number: HBTN");
-			errno = 2;
-			exit(errno);
-		}
-		if (status < 0 && args[1][0] != '0')
-		{
-			fprintf(stderr, "./hsh: exit: Illegal number: %s\n", args[1]);
-			errno = 2;
+			fprintf(stderr, "./hsh: exit: Illegal number: %d\n", status);
+			errno = 2, last_exit_status = errno;
 			exit(errno);
 		}
 	}
-	free_args(args);
+	free_args(args), last_exit_status = status;
 	exit(status);
 }
 
@@ -163,11 +182,14 @@ int _cdbuiltin(char **args, char **env)
 	return (0);
 }
 
- /* execute_builtin - execute builtin commands
- * @args: an array of strings inputted
- * @env: an array of environment variables
+ /**
+ * execute_builtin - Executes builtin commands
+ * @args: An array of strings inputted
+ * @env: An array of environment variables
+ *
  * Return: 0 on success
  */
+
 int execute_builtin(char **args, char **env)
 {
 	if (args == NULL || args[0] == NULL)
@@ -178,6 +200,10 @@ int execute_builtin(char **args, char **env)
 		return (_envbuiltin(args, env));
 	if (_strcmp(args[0], "cd") == 0)
 		return (_cdbuiltin(args, env));
+	if (_strcmp(args[0], "echo") == 0 && _strcmp(args[1], "&?") == 0)
+	{
+		return (echo_last_exit_status());
+	}
 	free_args(args);
 	return (0);
 }

@@ -9,7 +9,7 @@
  * dynamically allocated buffer
  * @n: pointer to a size_t variable
  * that specifiees the size of theh buffer
- * @straem: stream from which the program reads from
+ * @stream: stream from which the program reads from
  * Return: number of characters read, inncluding newline,
  * or -1 on failure
  */

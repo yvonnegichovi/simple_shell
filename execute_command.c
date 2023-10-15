@@ -26,7 +26,6 @@ char *find_path(char **env)
 		for (i = 0; i < 6; i++)
 		path++;
 	}
-	printf("path is %s\n", path);
 	return (path);
 }
 
@@ -59,7 +58,6 @@ char **split_path(char *path)
 	{
 		tokens[i] = _strdup(stoks);
 		stoks = strtok(NULL, ":");
-		printf("Tokens %d: %s\n", i, tokens[i]);
 	}
 	tokens[i] = NULL;
 	free(path_copy);
@@ -79,14 +77,14 @@ void execute_command(char **args, char **env)
 	char *path;
 
 	if (is_builtin(args, env))
-		execute_builtin(args, env);
+		execute_builtin(args, env), free_args(args);
 	else
 	{
 		pid = fork();
 		if (pid < 0)
 		{
-			perror("Forking failed");
-			return;
+			perror("Forking failed"), free_args(args);
+			exit(EXIT_FAILURE);
 		}
 		else if (pid == 0)
 		{
@@ -130,13 +128,10 @@ char *find_command(char *command, char **env)
 	if (path_env != NULL)
 	{
 		paths = split_path(path_env);
-		printf("paths is %s\n", *paths);
 		for (i = 0; paths[i] != NULL; i++)
 		{
 			if  (paths[i] != NULL && command != NULL)
 			{
-				printf("paths %d: %s\n", i, paths[i]);
-				printf("command is %s\n", command);
 				full_path = malloc(strlen(paths[i]) + strlen(command) + 2);
 				if (full_path != NULL)
 				{
@@ -144,7 +139,6 @@ char *find_command(char *command, char **env)
 					if (access(full_path, X_OK) == 0)
 					{
 						free_tokens(paths);
-						printf("full path is %s\n", full_path);
 						return (full_path);
 					}
 					free(full_path);
