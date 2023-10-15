@@ -1,3 +1,5 @@
+#include "shell.h"
+
 /**
  * _envbuiltin - prints the environment of the current directory
  * @env: array of environment variables
@@ -42,45 +44,6 @@ int _aliasbuiltin(void)
 	setenv("MY_VARIABLE", "some_value", 1);
 	unsetenv("MY_VARIABLE");
 	return (0);
-}
-
-/**
- * _exitbuiltin - implements the exit built-in command
- * @args: array of strings representing command-line arguments
- * @env: an array of environment variables
- * Return: 0 if no error, otherwise 2
- */
-
-int _exitbuiltin(char **args, char **env)
-{
-	int status = 0;
-	(void)env;
-
-	if (args[1] != NULL)
-	{
-		if (_strcmp(args[1], "HBTN") == 0)
-		{
-			printf("args[1]: \"%s\"\n", args[1]);
-			fprintf(stderr, "./hsh: exit: Illegal number: HBTN\n");
-			errno = 2, last_exit_status = errno;
-			exit(errno);
-		}
-
-		status = atoi(args[1]);
-		if (status == 0 && args[1][0] != '0')
-		{
-			errno = 0, last_exit_status = errno;
-			exit(errno);
-		}
-		else if (status < 0 && args[1][0] != '0')
-		{
-			fprintf(stderr, "./hsh: exit: Illegal number: %d\n", status);
-			errno = 2, last_exit_status = errno;
-			exit(errno);
-		}
-	}
-	free_args(args), last_exit_status = status;
-	exit(status);
 }
 
 /**
