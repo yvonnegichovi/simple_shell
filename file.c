@@ -1,10 +1,12 @@
 #include "shell.h"
-
+/**
+ *
+ */
 int fold(int argc, char *argv[])
 {
 	const char *filename =argv [1];
 	char command [1000];
-	FILE *file = fopen(filename)
+	FILE *file = fopen(filename, "r");
 
 		if (argc != 2)
 		{
@@ -20,7 +22,7 @@ int fold(int argc, char *argv[])
 	while (fgets(command, sizeof(command), file) != NULL)
 	{
 		int exit_status = system(command);
-		if (exist_status == -1)
+		if (exit_status == -1)
 			perror("system");
 	}
 	fclose (file);

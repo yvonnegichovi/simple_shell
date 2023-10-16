@@ -15,6 +15,7 @@
 #include <fcntl.h>
 
 #define MAX_ENV_LEN 100
+#define MAX_INPUT_LENGTH 1024
 
 int my_setenv(const char *name, const char *value);
 extern char **environ;

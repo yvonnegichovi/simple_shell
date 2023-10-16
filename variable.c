@@ -1,19 +1,25 @@
 #include "shell.h"
-/*
- *
- */
+/**
+ * It sets up a loop to continuously read user input.
+*It uses fgets to read a line of input from the user.
+*It removes the newline character at the end of the input to make it more user-friendly.
+*It checks if the input is equal to "$" and, if so, retrieves the process ID using getpid() and prints it.
+*/
 
-int vito () {
-    int status;
-    char* path = getenv("PATH");
+int vito (void)
+{
+	char input [MAX_INPUT_LENGTH];
 
-    status = system("ls /var");
-
-    printf("$ echo $?\n%d\n", WEXITSTATUS(status));
-
-    printf("$ echo $$\n%d\n", getpid());
-
-    printf("$ echo $PATH\n%s\n", path);
-
-    return 0;
+	while (1)
+	{
+		printf("CustomShell$");
+		fgets(input, sizeof(input), stdin);
+		
+		if (strcspn(input,"$") == 0)
+		{
+			pid_t pid = getpid();
+			printf("Process ID (PID): %d/n" ,pid);
+		}
+	}
+	return (0);
 }
