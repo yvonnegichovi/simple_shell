@@ -77,7 +77,7 @@ void execute_command(char **args, char **env)
 	char *path;
 
 	if (is_builtin(args, env))
-		execute_builtin(args, env), free_args(args);
+		execute_builtin(args, env);
 	else
 	{
 		pid = fork();

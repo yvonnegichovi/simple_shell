@@ -92,6 +92,8 @@ int _exitbuiltin(char **args, char **env)
 
 int execute_builtin(char **args, char **env)
 {
+	alias_t **aliases = NULL;
+
 	if (args == NULL || args[0] == NULL)
 		return (1);
 	if (_strcmp(args[0], "exit") == 0)
@@ -100,10 +102,12 @@ int execute_builtin(char **args, char **env)
 		return (_envbuiltin(args, env));
 	if (_strcmp(args[0], "cd") == 0)
 		return (_cdbuiltin(args, env));
-	if (_strcmp(args[0], "echo") == 0 && _strcmp(args[1], "&?") == 0)
+	if (_strcmp(args[0], "alias") == 0)
 	{
-		return (echo_last_exit_status());
+		return (alias_builtin(args, aliases));
 	}
+	if (_strcmp(args[0], "echo") == 0 && _strcmp(args[1], "&?") == 0)
+		return (echo_last_exit_status());
 	free_args(args);
 	return (0);
 }

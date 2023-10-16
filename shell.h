@@ -50,4 +50,25 @@ int _cdbuiltin(char **args, char **env);
 int execute_builtin(char **args, char **env);
 int _aliasbuiltin(void);
 
+/* alias functions */
+
+/**
+ * struct alias_s - user defined struct to handle alias command
+ * @name: name of thr alias
+ * @value: value of the alias
+ * @next: pointer to the next alias(for a linked lisst)
+ */
+
+typedef struct alias_s
+{
+	char *name;
+	char *value;
+	struct alias_s *next;
+} alias_t;
+alias_t *find_alias(alias_t **aliases, char *name);
+void create_or_update_alias(alias_t **aliases, char *name, char *value);
+void print_alias_value(alias_t **aliases, char *name);
+void print_all_aliases(alias_t **aliases);
+int alias_builtin(char **args, alias_t **aliases);
+
 #endif /* SHELL_H */
