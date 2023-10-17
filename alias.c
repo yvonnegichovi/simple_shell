@@ -41,6 +41,7 @@ int alias_builtin(char **args, alias_t **aliases)
 void print_all_aliases(alias_t **aliases)
 {
 	alias_t *current = *aliases;
+
 	while (current)
 	{
 		printf("alias %s='%s'\n", current->name, current->value);
@@ -71,7 +72,7 @@ void print_alias_value(alias_t **aliases, char *name)
 /**
  * create_or_update_alias - create or update an alias
  * @aliases: an array of aliases
- * @namee: the name of the alias
+ * @name: the name of the alias
  * @value: the value of the alias
  */
 
@@ -99,7 +100,7 @@ void create_or_update_alias(alias_t **aliases, char *name, char *value)
 }
 
 /**
- * find_alias = fiind an alias by name
+ * find_alias - fiind an alias by name
  * @aliases:: an array of aliases
  * @name: the name of the alias to find
  * Return: a pointer to the found alias or NULL if not found
