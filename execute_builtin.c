@@ -43,14 +43,6 @@ int echo_last_exit_status(void)
 	return (0);
 }
 
- /**
- * execute_builtin - Executes builtin commands
- * @args: An array of strings inputted
- * @env: An array of environment variables
- *
- * Return: 0 on success
- */
-
 /**
  * _exitbuiltin - implements the exit built-in command
  * @args: array of strings representing command-line arguments
@@ -89,6 +81,14 @@ int _exitbuiltin(char **args, char **env)
 	free_args(args), last_exit_status = status;
 	exit(status);
 }
+
+/**
+ * execute_builtin - Executes builtin commands
+ * @args: An array of strings inputted
+ * @env: An array of environment variables
+ *
+ * Return: 0 on success
+ */
 
 int execute_builtin(char **args, char **env)
 {
