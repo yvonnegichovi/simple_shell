@@ -35,7 +35,7 @@ int _envbuiltin(char **args, char **env)
 
 int _cdbuiltin(char **args, char **env)
 {
-	char *new_dir = NULL, *current_dir = NULL, *new_current_dir = NULL;
+	char *new_dir = NULL;
 	(void)env;
 
 	if (args[1] == NULL || _strcmp(args[1], "~") == 0)
@@ -49,24 +49,65 @@ int _cdbuiltin(char **args, char **env)
 		fprintf(stderr, "Error: env variable not found\n");
 		return (-1);
 	}
+	if (change_directory(new_dir) == -1)
+		return (-1);
+	if (update_pwd(new_dir, env) == -1)
+		return (-1);
+	return (0);
+}
+
+/**
+ * change_directory - changes the directory
+ * @new_dir: the new directory
+ * Return: 0 on success
+ */
+
+int change_directory(char *new_dir)
+{
+	if (chdir(new_dir) == -1)
+	{
+		perror("chdir");
+		return (-1);
+	}
+	return (0);
+}
+
+/**
+ * update_pwd - updates the new pwd
+ * @new_dir:the new new directory to be updated
+ * @env: an array of environment variables
+ * Return: 0 on success
+ */
+
+int update_pwd(char *new_dir, char **env)
+{
+	char *new_current_dir = NULL, *current_dir = NULL;
+	(void)new_dir;
+	(void)env;
+
 	current_dir = getcwd(NULL, 0);
 	if (!current_dir)
 	{
-		perror("malloc");
+		perror("getcwd");
 		return (-1);
 	}
-	if (chdir(new_dir) == -1)
-		return (perror("chdir"), free(current_dir), -1);
 	if (setenv("OLDPWD", current_dir, 1) == -1)
-		return (perror("setenv"), free(current_dir), -1);
+	{
+		perror("setenv"), free(current_dir);
+		return (-1);
+	}
+	free(current_dir);
 	new_current_dir = getcwd(NULL, 0);
 	if (!new_current_dir)
 	{
-		perror("getcwd"), free(current_dir);
+		perror("getcwd");
 		return (-1);
 	}
 	if (setenv("PWD", new_current_dir, 1) == -1)
-		return (perror("setenv"), free(current_dir), free(new_current_dir), -1);
-	free(current_dir), free(new_current_dir);
+	{
+		perror("setenv"), free(new_current_dir);
+		return (-1);
+	}
+	free(new_current_dir);
 	return (0);
 }

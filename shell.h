@@ -49,6 +49,8 @@ int is_builtin(char **args, char **env);
 int _envbuiltin(char **args, char **env);
 int _exitbuiltin(char **args, char **env);
 int _cdbuiltin(char **args, char **env);
+int update_pwd(char *new_dir, char **env);
+int change_directory(char *new_dir);
 int execute_builtin(char **args, char **env);
 
 /* alias functions */
