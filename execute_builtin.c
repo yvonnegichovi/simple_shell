@@ -44,20 +44,15 @@ int _exitbuiltin(char **args, char **env)
 		{
 			fprintf(stderr, "./hsh: exit: Illegal number: HBTN\n");
 			errno = 2;
-			exit(errno);
+			exit(status);
 		}
 
 		status = atoi(args[1]);
-		if (status == 0 && args[1][0] != '0')
-		{
-			errno = 0;
-			exit(errno);
-		}
-		else if (status < 0 && args[1][0] != '0')
+		if (status < 0 && args[1][0] != '0')
 		{
 			fprintf(stderr, "./hsh: exit: Illegal number: %d\n", status);
 			errno = 2;
-			exit(errno);
+			exit(status);
 		}
 	}
 	free_args(args);
