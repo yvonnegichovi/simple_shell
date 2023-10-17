@@ -1,7 +1,5 @@
 #include "shell.h"
 
-int last_exit_status = 0;
-
 /**
  * is_builtin - checks whether a command is a builtin
  * @args: an array of strings inputted
@@ -22,25 +20,10 @@ int is_builtin(char **args, char **env)
 	{
 		return (1);
 	}
-	else if (_strcmp(args[0], "echo") == 0 && _strcmp(args[1], "$?") == 0)
-	{
-		return (1);
-	}
 	else
 	{
 		return (0);
 	}
-}
-
-/**
- * echo_last_exit_status - prints the last exit status
- * Return: 0 on success
- */
-
-int echo_last_exit_status(void)
-{
-	printf("%d\n", last_exit_status);
-	return (0);
 }
 
 /**
@@ -59,26 +42,25 @@ int _exitbuiltin(char **args, char **env)
 	{
 		if (_strcmp(args[1], "HBTN") == 0)
 		{
-			printf("args[1]: \"%s\"\n", args[1]);
 			fprintf(stderr, "./hsh: exit: Illegal number: HBTN\n");
-			errno = 2, last_exit_status = errno;
+			errno = 2;
 			exit(errno);
 		}
 
 		status = atoi(args[1]);
 		if (status == 0 && args[1][0] != '0')
 		{
-			errno = 0, last_exit_status = errno;
+			errno = 0;
 			exit(errno);
 		}
 		else if (status < 0 && args[1][0] != '0')
 		{
 			fprintf(stderr, "./hsh: exit: Illegal number: %d\n", status);
-			errno = 2, last_exit_status = errno;
+			errno = 2;
 			exit(errno);
 		}
 	}
-	free_args(args), last_exit_status = status;
+	free_args(args);
 	exit(status);
 }
 
@@ -106,8 +88,6 @@ int execute_builtin(char **args, char **env)
 	{
 		return (alias_builtin(args, aliases));
 	}
-	if (_strcmp(args[0], "echo") == 0 && _strcmp(args[1], "&?") == 0)
-		return (echo_last_exit_status());
 	free_args(args);
 	return (0);
 }
