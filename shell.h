@@ -17,6 +17,8 @@
 #define MAX_ENV_LEN 100
 #define MAX_INPUT_LENGTH 1024
 
+/* user-defined functions */
+
 int my_setenv(const char *name, const char *value);
 extern char **environ;
 int fold(int argc, char *argv[]);
@@ -43,13 +45,11 @@ char *_strstr(char *s, char *c);
 
 /* builtin functions */
 
-int echo_last_exit_status(void);
 int is_builtin(char **args, char **env);
 int _envbuiltin(char **args, char **env);
 int _exitbuiltin(char **args, char **env);
 int _cdbuiltin(char **args, char **env);
 int execute_builtin(char **args, char **env);
-int _aliasbuiltin(void);
 
 /* alias functions */
 

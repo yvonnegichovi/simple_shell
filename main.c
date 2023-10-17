@@ -39,8 +39,6 @@ int main(int argc, char **argv, char **env)
 		free_args(args);
 		if (buffer)
 			free(buffer), buffer = NULL, buffsize = 0;
-		printf("buffer buffing is %s\n", buffer);
 	}
-	printf("buffer is still %s\n", buffer);
 	return (0);
 }

@@ -27,26 +27,6 @@ int _envbuiltin(char **args, char **env)
 }
 
 /**
- * _aliasbuiltin - prints alias variables
- * Return: 0 on success
- */
-
-int _aliasbuiltin(void)
-{
-	char *path = getenv("PATH");
-
-	if (path != NULL)
-		printf("PATH = %s\n", path);
-	else
-	{
-		printf("PATH is not set.\n");
-	}
-	setenv("MY_VARIABLE", "some_value", 1);
-	unsetenv("MY_VARIABLE");
-	return (0);
-}
-
-/**
  * _cdbuiltin - changes the current directory
  * @args: array of commmands tokenized
  * @env: an array of environment variables
