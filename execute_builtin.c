@@ -81,7 +81,6 @@ int execute_builtin(char **args, char **env)
 {
         alias_t **aliases = NULL;
 
-<<<<<<< HEAD
         if (args == NULL || args[0] == NULL)
                 return (1);
         if (_strcmp(args[0], "exit") == 0)
@@ -98,20 +97,4 @@ int execute_builtin(char **args, char **env)
                 return (echo_last_exit_status());
         free_args(args);
         return (0);
-=======
-	if (args == NULL || args[0] == NULL)
-		return (1);
-	if (_strcmp(args[0], "exit") == 0)
-		return (_exitbuiltin(args, env));
-	if (_strcmp(args[0], "env") == 0)
-		return (_envbuiltin(args, env));
-	if (_strcmp(args[0], "cd") == 0)
-		return (_cdbuiltin(args, env));
-	if (_strcmp(args[0], "alias") == 0)
-	{
-		return (alias_builtin(args, aliases));
-	}
-	free_args(args);
-	return (0);
->>>>>>> 28b5f2a01817154599dd5f219a518abf4e01b82d
 }
