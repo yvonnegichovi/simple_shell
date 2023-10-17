@@ -43,17 +43,27 @@ int _exitbuiltin(char **args, char **env)
 		if (_strcmp(args[1], "HBTN") == 0)
 		{
 			fprintf(stderr, "./hsh: exit: Illegal number: HBTN\n");
-			errno = 2;
-			exit(status);
+			free_args(args), errno = 2;
+			exit(errno);
 		}
 
 		status = atoi(args[1]);
 		if (status < 0 && args[1][0] != '0')
 		{
 			fprintf(stderr, "./hsh: exit: Illegal number: %d\n", status);
-			errno = 2;
+			free_args(args), errno = 2;
+			exit(errno);
+		}
+		if (status == 0)
+		{
+			free_args(args);
 			exit(status);
 		}
+	}
+	if (errno != 0)
+	{
+		free_args(args);
+		exit(2);
 	}
 	free_args(args);
 	exit(status);
