@@ -44,38 +44,29 @@ int _cdbuiltin(char **args, char **env)
 		new_dir = getenv("OLDPWD");
 	else
 		new_dir = args[1];
-	if (new_dir == NULL)
+	if (!new_dir)
 	{
-		fprintf(stderr, "Error: environment variable not found\n");
+		fprintf(stderr, "Error: env variable not found\n");
 		return (-1);
 	}
 	current_dir = getcwd(NULL, 0);
-	if (current_dir == NULL)
+	if (!current_dir)
 	{
 		perror("malloc");
 		return (-1);
 	}
 	if (chdir(new_dir) == -1)
-	{
-		perror("chdir"), free(current_dir);
-		return (-1);
-	}
+		return (perror("chdir"), free(current_dir), -1);
 	if (setenv("OLDPWD", current_dir, 1) == -1)
-	{
-		perror("setenv"), free(current_dir);
-		return (-1);
-	}
+		return (perror("setenv"), free(current_dir), -1);
 	new_current_dir = getcwd(NULL, 0);
-	if (new_current_dir == NULL)
+	if (!new_current_dir)
 	{
 		perror("getcwd"), free(current_dir);
 		return (-1);
 	}
 	if (setenv("PWD", new_current_dir, 1) == -1)
-	{
-		perror("setenv"), free(current_dir), free(new_current_dir);
-		return (-1);
-	}
+		return (perror("setenv"), free(current_dir), free(new_current_dir), -1);
 	free(current_dir), free(new_current_dir);
 	return (0);
 }

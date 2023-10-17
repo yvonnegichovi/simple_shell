@@ -28,19 +28,13 @@ ssize_t _getline(char **line, size_t *n, FILE *stream)
 		if (c == EOF || c == '\n')
 		{
 			if (c == EOF && bytesRead == 0)
-			{
-				free(buffer), *line = NULL, *n = 0;
 				return (-1);
-			}
 			if (bytesRead >= bufferSize)
 			{
 				bufferSize += MAX_BUFFER_SIZE;
 				buffer = (char *)realloc(buffer, bufferSize);
 				if (buffer == NULL)
-				{
-					free(*line), *line = NULL, *n = 0;
 					return (-1);
-				}
 				*line = buffer, *n = bufferSize;
 			}
 			buffer[bytesRead] = '\0';
@@ -51,10 +45,7 @@ ssize_t _getline(char **line, size_t *n, FILE *stream)
 			bufferSize += MAX_BUFFER_SIZE;
 			buffer = (char *)realloc(buffer, bufferSize);
 			if (buffer == NULL)
-			{
-				free(*line), *line = NULL, *n = 0;
 				return (-1);
-			}
 			*line = buffer, *n = bufferSize;
 		}
 		buffer[bytesRead++] = c;
