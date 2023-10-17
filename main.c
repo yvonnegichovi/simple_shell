@@ -37,8 +37,8 @@ int main(int argc, char **argv, char **env)
 		}
 		execute_command(args, env);
 		free_args(args);
-		if (buffer)
-			free(buffer), buffer = NULL, buffsize = 0;
+		free(buffer), buffer = NULL;
 	}
+	free(buffer);
 	return (0);
 }
